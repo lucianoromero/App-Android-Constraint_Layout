@@ -2,14 +2,12 @@ package alura.com.br.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.Serializable;
 import java.util.List;
 
 import alura.com.br.R;
@@ -17,9 +15,12 @@ import alura.com.br.dao.PacoteDAO;
 import alura.com.br.model.Pacote;
 import alura.com.br.ui.adapter.ListaPacotesAdapter;
 
+import static alura.com.br.ui.activity.PacoteActivityConstantes.CHAVE_PACOTE;
+
 public class ListaPacotesActivity extends AppCompatActivity {
 
     public static final String TITULO_APP_BAR = "Pacotes";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +34,20 @@ public class ListaPacotesActivity extends AppCompatActivity {
         ListView listaDePacotes = findViewById(R.id.lista_pacotes_listview);
         List<Pacote> pacotes = new PacoteDAO().lista();
         listaDePacotes.setAdapter(new ListaPacotesAdapter(pacotes, this));
-       //Evento de Click
+        //Evento de Click
         listaDePacotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int posicao, long id) {
                 Pacote pacoteClicado = pacotes.get(posicao);
-                Intent intent = new Intent(ListaPacotesActivity.this,
-                        ResumoPacoteActivity.class);
-                intent.putExtra("pacote",pacoteClicado);
-                startActivity(intent);
+                vaiParaResumoPacote(pacoteClicado);
             }
         });
+    }
+
+    private void vaiParaResumoPacote(Pacote pacoteClicado) {
+        Intent intent = new Intent(ListaPacotesActivity.this,
+                ResumoPacoteActivity.class);
+        intent.putExtra(CHAVE_PACOTE, pacoteClicado);
+        startActivity(intent);
     }
 }
