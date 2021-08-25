@@ -1,13 +1,15 @@
 package alura.com.br.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.Serializable;
 import java.util.List;
 
 import alura.com.br.R;
@@ -31,10 +33,14 @@ public class ListaPacotesActivity extends AppCompatActivity {
         ListView listaDePacotes = findViewById(R.id.lista_pacotes_listview);
         List<Pacote> pacotes = new PacoteDAO().lista();
         listaDePacotes.setAdapter(new ListaPacotesAdapter(pacotes, this));
+       //Evento de Click
         listaDePacotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ListaPacotesActivity.this, ResumoPacoteActivity.class);
+            public void onItemClick(AdapterView<?> adapterView, View view, int posicao, long id) {
+                Pacote pacoteClicado = pacotes.get(posicao);
+                Intent intent = new Intent(ListaPacotesActivity.this,
+                        ResumoPacoteActivity.class);
+                intent.putExtra("pacote",pacoteClicado);
                 startActivity(intent);
             }
         });

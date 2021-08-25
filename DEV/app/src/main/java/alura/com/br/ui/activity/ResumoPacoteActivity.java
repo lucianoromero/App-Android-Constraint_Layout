@@ -1,19 +1,15 @@
 package alura.com.br.ui.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import alura.com.br.R;
 import alura.com.br.model.Pacote;
@@ -33,28 +29,29 @@ public class ResumoPacoteActivity extends AppCompatActivity {
 
         setTitle(TITULO_APPBAR);
 
-        Pacote pacoteSaoPaulo = new Pacote("São Paulo", "sao_paulo_sp",
-                2, new BigDecimal("243.99"));
+        Intent intent = getIntent();
+        if (intent.hasExtra("pacote")) {
+            final Pacote pacote = (Pacote) intent.getSerializableExtra("pacote");
 
-        mostraLocal(pacoteSaoPaulo);
+            mostraLocal(pacote);
+            mostraImagem(pacote);
+            mostraDias(pacote);
+            mostraPreco(pacote);
+            mostraData(pacote);
 
-        mostraImagem(pacoteSaoPaulo);
+            Button botaoRealizaPagamento = findViewById(R.id.resumo_pacote_botao_realiza_pagamento);
+            //Evento de Click
+            botaoRealizaPagamento.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(ResumoPacoteActivity.this,
+                            PagamentoActivity.class);
+                    intent.putExtra("pacote",pacote);
+                    startActivity(intent);
+                }
+            });
+        }
 
-        mostraDias(pacoteSaoPaulo);
-
-        mostraPreco(pacoteSaoPaulo);
-
-        mostraData(pacoteSaoPaulo);
-
-        Button botaoRealizaPagamento = findViewById(R.id.resumo_pacote_botao_realiza_pagamento);
-        botaoRealizaPagamento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ResumoPacoteActivity.this,
-                        PagamentoActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void mostraData(Pacote pacote) {
